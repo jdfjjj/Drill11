@@ -7,6 +7,8 @@ from transitions import Machine
 
 class AutoRun:
     SCREEN_WIDTH = 800
+    SPEED = 10
+    DRAW_SIZE = 150
 
     def __init__(self, boy):
         self.boy = boy
@@ -18,19 +20,30 @@ class AutoRun:
         pass
 
     def do(self):
-        next_x = self.boy.x + self.boy.face_dir * 5
-        if next_x <= 50:
-            self.boy.x = 50
+        edge = self.DRAW_SIZE // 2
+        next_x = self.boy.x + self.boy.face_dir * self.SPEED
+        if next_x <= edge:
+            self.boy.x = edge
             self.boy.face_dir = 1
-        elif next_x >= self.SCREEN_WIDTH - 50:
-            self.boy.x = self.SCREEN_WIDTH - 50
+        elif next_x >= self.SCREEN_WIDTH - edge:
+            self.boy.x = self.SCREEN_WIDTH - edge
             self.boy.face_dir = -1
         else:
             self.boy.x = next_x
         self.boy.frame = (self.boy.frame + 1) % 8
 
     def draw(self):
-        pass
+        direction = self.boy.face_dir
+        self.boy.image.clip_draw(
+            self.boy.frame * 100,
+            100 if direction == 1 else 0,
+            100,
+            100,
+            self.boy.x,
+            self.boy.y + (self.DRAW_SIZE - 100) // 2,
+            self.DRAW_SIZE,
+            self.DRAW_SIZE,
+        )
 
 
 class Boy:
