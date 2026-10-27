@@ -5,15 +5,33 @@ from pico2d import load_image
 from transitions import Machine
 
 
+class AutoRun:
+    def __init__(self, boy):
+        self.boy = boy
+
+    def enter(self):
+        pass
+
+    def exit(self):
+        pass
+
+    def do(self):
+        pass
+
+    def draw(self):
+        pass
+
+
 class Boy:
     def __init__(self):
         self.x, self.y = 400, 90
         self.frame = 0
         self.face_dir = 1
         self.image = load_image('animation_sheet.png')
+        self.auto_run = AutoRun(self)
         self.machine = Machine(
             model=self,
-            states=['IDLE', 'RUN', 'SLEEP'],
+            states=['IDLE', 'RUN', 'SLEEP', 'AUTO_RUN'],
             initial='IDLE',
             auto_transitions=False,
             transitions=[
@@ -28,6 +46,12 @@ class Boy:
                     'source': ['IDLE', 'SLEEP'],
                     'dest': 'RUN',
                     'after': 'enter_run',
+                },
+                {
+                    'trigger': 'start_auto_run',
+                    'source': 'IDLE',
+                    'dest': 'AUTO_RUN',
+                    'after': 'enter_auto_run',
                 },
                 {
                     'trigger': 'stop_run',
@@ -54,6 +78,8 @@ class Boy:
         elif self.state == 'RUN':
             self.x = min(max(self.x + self.face_dir * 5, 50), 750)
             self.frame = (self.frame + 1) % 8
+        elif self.state == 'AUTO_RUN':
+            self.auto_run.do()
 
     def run_in_direction(self, direction):
         self.face_dir = direction
@@ -70,12 +96,20 @@ class Boy:
     def enter_run(self):
         self.frame = 0
 
+    def enter_auto_run(self):
+        self.auto_run.enter()
+
+    def exit_auto_run(self):
+        self.auto_run.exit()
+
     def enter_idle(self):
         self.frame = 0
         self.idle_started_at = time.monotonic()
 
     def draw(self):
-        if self.state == 'SLEEP':
+        if self.state == 'AUTO_RUN':
+            self.auto_run.draw()
+        elif self.state == 'SLEEP':
             direction = 1 if self.face_dir == 1 else -1
             self.image.clip_composite_draw(
                 0,

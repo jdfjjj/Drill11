@@ -23,6 +23,8 @@ def handle_events():
             and boy.state == 'SLEEP'
         ):
             boy.wake()
+        elif a_down(event) and boy.state == 'IDLE':
+            boy.start_auto_run()
         elif event.type == SDL_KEYDOWN and event.key in (SDLK_LEFT, SDLK_RIGHT):
             if event.key not in direction_keys:
                 direction_keys.append(event.key)
