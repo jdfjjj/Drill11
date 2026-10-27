@@ -58,6 +58,8 @@ stateDiagram-v2
     AutoRun --> Run : 방향키 누름
 ```
 
+![상태 다이어그램](state_diagram.svg)
+
 ## 6. 기능 요구사항
 
 ### FR-1. AutoRun 진입
@@ -119,7 +121,7 @@ stateDiagram-v2
 ## 9. 제출물
 
 - 소스 코드 전체 (GitHub 저장소)
-- **상태 다이어그램 이미지 파일** (예: `state_diagram.png`) — 저장소에 반드시 포함
+- **상태 다이어그램 이미지 파일** (`state_diagram.svg`) — 저장소에 반드시 포함
 - 제출 방식은 디스코드에 공지된 실습 과제 제출 요령을 따른다.
 
 ## 10. 작업 계획 및 커밋 규칙

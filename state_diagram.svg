@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="title description">
+  <title id="title">Boy state diagram</title>
+  <desc id="description">Idle, Run, and AutoRun state transitions.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", sans-serif; fill: #172033; }
+      .state { fill: #e8f1ff; stroke: #315a91; stroke-width: 2; rx: 12; }
+      .auto { fill: #fff1cc; stroke: #a66a00; }
+      .edge { fill: none; stroke: #334155; stroke-width: 2.5; marker-end: url(#arrow); }
+      .label { font-size: 16px; font-weight: 600; }
+      .name { font-size: 23px; font-weight: 700; text-anchor: middle; }
+    </style>
+  </defs>
+  <rect width="900" height="520" fill="#ffffff"/>
+
+  <circle cx="185" cy="35" r="7" fill="#172033"/>
+  <path class="edge" d="M 185 43 L 185 122"/>
+
+  <rect class="state" x="85" y="130" width="200" height="90"/>
+  <text class="name" x="185" y="184">IDLE</text>
+  <rect class="state" x="615" y="130" width="200" height="90"/>
+  <text class="name" x="715" y="184">RUN</text>
+  <rect class="state auto" x="350" y="345" width="200" height="90"/>
+  <text class="name" x="450" y="399">AUTO_RUN</text>
+
+  <path class="edge" d="M 285 148 Q 450 58 615 148"/>
+  <text class="label" x="450" y="76" text-anchor="middle">방향키 누름</text>
+
+  <path class="edge" d="M 615 202 Q 450 292 285 202"/>
+  <text class="label" x="450" y="282" text-anchor="middle">방향키 뗌</text>
+
+  <path class="edge" d="M 245 220 Q 300 300 370 345"/>
+  <text class="label" x="260" y="286" text-anchor="middle">a 키 누름</text>
+
+  <path class="edge" d="M 380 435 Q 180 500 150 220"/>
+  <text class="label" x="205" y="467" text-anchor="middle">5초 경과</text>
+
+  <path class="edge" d="M 520 435 Q 720 500 750 220"/>
+  <text class="label" x="692" y="467" text-anchor="middle">방향키 누름</text>
+</svg>
