@@ -6,6 +6,8 @@ from transitions import Machine
 
 
 class AutoRun:
+    SCREEN_WIDTH = 800
+
     def __init__(self, boy):
         self.boy = boy
 
@@ -16,7 +18,16 @@ class AutoRun:
         pass
 
     def do(self):
-        pass
+        next_x = self.boy.x + self.boy.face_dir * 5
+        if next_x <= 50:
+            self.boy.x = 50
+            self.boy.face_dir = 1
+        elif next_x >= self.SCREEN_WIDTH - 50:
+            self.boy.x = self.SCREEN_WIDTH - 50
+            self.boy.face_dir = -1
+        else:
+            self.boy.x = next_x
+        self.boy.frame = (self.boy.frame + 1) % 8
 
     def draw(self):
         pass
