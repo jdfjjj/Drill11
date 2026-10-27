@@ -3,6 +3,11 @@ from pico2d import *
 from grass import Grass # grass.py에서 정의한 Grass 클래스를 가져옴
 from boy import Boy # boy.py에서 정의한 Boy 클래스를 가져옴
 
+
+def a_down(event):
+    return event.type == SDL_KEYDOWN and event.key == SDLK_a
+
+
 def handle_events():
     global running
 
