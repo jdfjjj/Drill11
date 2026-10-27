@@ -74,8 +74,9 @@ class Boy:
                 },
                 {
                     'trigger': 'start_run',
-                    'source': ['IDLE', 'SLEEP'],
+                    'source': ['IDLE', 'SLEEP', 'AUTO_RUN'],
                     'dest': 'RUN',
+                    'before': 'exit_auto_run',
                     'after': 'enter_run',
                 },
                 {
@@ -121,7 +122,7 @@ class Boy:
 
     def run_in_direction(self, direction):
         self.face_dir = direction
-        if self.state in ('IDLE', 'SLEEP'):
+        if self.state in ('IDLE', 'SLEEP', 'AUTO_RUN'):
             self.start_run()
 
     def stop_running(self):
@@ -138,7 +139,8 @@ class Boy:
         self.auto_run.enter()
 
     def exit_auto_run(self):
-        self.auto_run.exit()
+        if self.state == 'AUTO_RUN':
+            self.auto_run.exit()
 
     def enter_idle(self):
         self.frame = 0

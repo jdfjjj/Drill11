@@ -28,7 +28,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key in (SDLK_LEFT, SDLK_RIGHT):
             if event.key not in direction_keys:
                 direction_keys.append(event.key)
-            if boy.state in ('IDLE', 'RUN', 'SLEEP'):
+            if boy.state in ('IDLE', 'RUN', 'SLEEP', 'AUTO_RUN'):
                 direction = 1 if direction_keys[-1] == SDLK_RIGHT else -1
                 boy.run_in_direction(direction)
         elif event.type == SDL_KEYUP and event.key in (SDLK_LEFT, SDLK_RIGHT):
