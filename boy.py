@@ -1,0 +1,101 @@
+import math
+import time
+
+from pico2d import load_image
+from transitions import Machine
+
+
+class Boy:
+    def __init__(self):
+        self.x, self.y = 400, 90
+        self.frame = 0
+        self.face_dir = 1
+        self.image = load_image('animation_sheet.png')
+        self.machine = Machine(
+            model=self,
+            states=['IDLE', 'RUN', 'SLEEP'],
+            initial='IDLE',
+            auto_transitions=False,
+            transitions=[
+                {
+                    'trigger': 'timeout',
+                    'source': 'IDLE',
+                    'dest': 'SLEEP',
+                    'after': 'enter_sleep',
+                },
+                {
+                    'trigger': 'start_run',
+                    'source': ['IDLE', 'SLEEP'],
+                    'dest': 'RUN',
+                    'after': 'enter_run',
+                },
+                {
+                    'trigger': 'stop_run',
+                    'source': 'RUN',
+                    'dest': 'IDLE',
+                    'after': 'enter_idle',
+                },
+                {
+                    'trigger': 'wake',
+                    'source': 'SLEEP',
+                    'dest': 'IDLE',
+                    'after': 'enter_idle',
+                },
+            ],
+        )
+        self.idle_started_at = time.monotonic()
+
+    def update(self):
+        if self.state == 'IDLE':
+            if time.monotonic() - self.idle_started_at >= 5:
+                self.timeout()
+                return
+            self.frame = (self.frame + 1) % 8
+        elif self.state == 'RUN':
+            self.x = min(max(self.x + self.face_dir * 5, 50), 750)
+            self.frame = (self.frame + 1) % 8
+
+    def run_in_direction(self, direction):
+        self.face_dir = direction
+        if self.state in ('IDLE', 'SLEEP'):
+            self.start_run()
+
+    def stop_running(self):
+        if self.state == 'RUN':
+            self.stop_run()
+
+    def enter_sleep(self):
+        self.frame = 0
+
+    def enter_run(self):
+        self.frame = 0
+
+    def enter_idle(self):
+        self.frame = 0
+        self.idle_started_at = time.monotonic()
+
+    def draw(self):
+        if self.state == 'SLEEP':
+            direction = 1 if self.face_dir == 1 else -1
+            self.image.clip_composite_draw(
+                0,
+                300 if self.face_dir == 1 else 200,
+                100,
+                100,
+                direction * math.pi / 2,
+                '',
+                self.x,
+                self.y - 30,
+                100,
+                100,
+            )
+        elif self.state == 'RUN':
+            if self.face_dir == 1:
+                self.image.clip_draw(self.frame * 100, 100, 100, 100, self.x, self.y)
+            else:
+                self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
+        elif self.state == 'IDLE':
+            if self.face_dir == 1:
+                self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
+            else:
+                self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
