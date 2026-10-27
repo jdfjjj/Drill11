@@ -9,17 +9,24 @@ class AutoRun:
     SCREEN_WIDTH = 800
     SPEED = 10
     DRAW_SIZE = 150
+    DURATION = 5
 
     def __init__(self, boy):
         self.boy = boy
+        self.started_at = None
 
     def enter(self):
-        pass
+        self.started_at = time.monotonic()
+        self.boy.frame = 0
 
     def exit(self):
-        pass
+        self.started_at = None
 
     def do(self):
+        if time.monotonic() - self.started_at >= self.DURATION:
+            self.boy.auto_run_timeout()
+            return
+
         edge = self.DRAW_SIZE // 2
         next_x = self.boy.x + self.boy.face_dir * self.SPEED
         if next_x <= edge:
@@ -76,6 +83,13 @@ class Boy:
                     'source': 'IDLE',
                     'dest': 'AUTO_RUN',
                     'after': 'enter_auto_run',
+                },
+                {
+                    'trigger': 'auto_run_timeout',
+                    'source': 'AUTO_RUN',
+                    'dest': 'IDLE',
+                    'before': 'exit_auto_run',
+                    'after': 'enter_idle',
                 },
                 {
                     'trigger': 'stop_run',
